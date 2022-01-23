@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  readwrite-service:
+    image: readwrite-service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    command: sh -c "/wait"
+    entrypoint: ./readwrite
+    environment:
+      - WAIT_HOSTS=redis:6379
+    tty: true
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    command: redis-server
